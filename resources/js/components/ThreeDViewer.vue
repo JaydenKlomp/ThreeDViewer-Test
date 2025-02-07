@@ -19,30 +19,27 @@ onMounted(() => {
     initThree();
 });
 
-watch(() => props.modelPath, () => {
-    initThree();
+watch(() => props.modelPath, (newModel) => {
+    if (model) {
+        scene.remove(model); // 🔥 Verwijder het oude model als er een nieuw model komt
+    }
+    loadModel(newModel); // 🔥 Laad het nieuwe model in de bestaande scene
 });
 
 const initThree = () => {
-    if (threeContainer.value) {
-        threeContainer.value.innerHTML = "";
-    }
+    if (!threeContainer.value) return;
 
-    // Scene Setup
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf0f0f0);
 
-    // Camera Setup (🔥 Raise the camera higher)
-    camera = new THREE.PerspectiveCamera(50, 600 / 400, 0.1, 1000);
-    camera.position.set(0, 2, 6); 
+    camera = new THREE.PerspectiveCamera(50, 600 / 300, 0.1, 1000);
+    camera.position.set(0, 2, 5);
 
-    // Renderer Setup
     renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(600, 400);
+    renderer.setSize(600, 300);
     renderer.setPixelRatio(window.devicePixelRatio);
     threeContainer.value.appendChild(renderer.domElement);
 
-    // Lights
     const light = new THREE.AmbientLight(0xffffff, 1);
     scene.add(light);
 
@@ -53,45 +50,47 @@ const initThree = () => {
     controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.enableZoom = true; // Allow zooming
-    controls.minDistance = 4; // Prevent too much zoom-in
-    controls.maxDistance = 12; // Prevent too much zoom-out
-    controls.enablePan = false; // No panning
+    controls.enableZoom = true;
+    controls.minDistance = 4;
+    controls.maxDistance = 12;
+    controls.enablePan = false;
 
-    // Stop auto-rotation when dragging
     controls.addEventListener("start", () => {
         autoRotate = false;
     });
 
-    // Resume auto-rotation when released
     controls.addEventListener("end", () => {
         autoRotate = true;
     });
 
-    // Load 3D model
-    const loader = new GLTFLoader();
-    loader.load(props.modelPath, (gltf) => {
-        model = gltf.scene;
-        model.position.y -= 0.3; // 🔥 Move model slightly lower
-        scene.add(model);
-        animate();
-    });
+    loadModel(props.modelPath);
+    animate();
+};
 
-    // Animation Loop
-    const animate = () => {
-        requestAnimationFrame(animate);
-        if (autoRotate && model) {
-            model.rotation.y += 0.01; // Auto-rotation
-        }
-        controls.update();
-        renderer.render(scene, camera);
-    };
+const loadModel = (modelPath) => {
+    if (!modelPath) return;
+
+    const loader = new GLTFLoader();
+    loader.load(modelPath, (gltf) => {
+        model = gltf.scene;
+        model.position.y -= 0.3;
+        scene.add(model);
+    });
+};
+
+const animate = () => {
+    requestAnimationFrame(animate);
+    if (autoRotate && model) {
+        model.rotation.y += 0.01;
+    }
+    controls.update();
+    renderer.render(scene, camera);
 };
 </script>
 <style scoped>
 .three-container {
     width: 600px;
-    height: 400px;
+    height: 300px;
     margin: auto;
 }
 </style>
