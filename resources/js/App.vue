@@ -49,7 +49,7 @@ import ThreeDViewer from "@/components/ThreeDViewer.vue";
 
 const autos = ref([
     { merk: "Toyota", model: "Corolla", kleur: "Blauw", prijs: 22000, modelPath: "/models/toyotacorolla.glb" },
-    { merk: "Volkswagen", model: "Golf", kleur: "Zwart", prijs: 25000, modelPath: "/models/volkswagengolf.glb" },
+    { merk: "Volkswagen", model: "Golf", kleur: "Zwart", prijs: 25000, modelPath: "/models/volkswagen.glb" },
     { merk: "BMW", model: "3 Serie", kleur: "Wit", prijs: 35000, modelPath: "/models/bmw.glb" },
     { merk: "Mercedes", model: "C-Klasse", kleur: "Grijs", prijs: 40000, modelPath: "/models/mercedes.glb" },
     { merk: "Ford", model: "Focus", kleur: "Rood", prijs: 20000, modelPath: "/models/ford.glb" }
