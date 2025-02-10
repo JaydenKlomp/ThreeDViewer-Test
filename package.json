@@ -17,6 +17,7 @@
     "dependencies": {
         "@vitejs/plugin-vue": "^5.2.1",
         "@vueuse/core": "^12.5.0",
+        "bootstrap": "^5.3.3",
         "three": "^0.173.0",
         "vue": "^3.5.13"
     }
